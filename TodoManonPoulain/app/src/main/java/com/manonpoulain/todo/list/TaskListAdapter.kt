@@ -3,6 +3,7 @@ package com.manonpoulain.todo.list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -22,13 +23,19 @@ object MyItemsDiffCallback : DiffUtil.ItemCallback<Task>() {
 
 class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(MyItemsDiffCallback) {
 
-    //var currentList: List<Task> = emptyList()
 
     // on utilise `inner` ici afin d'avoir accès aux propriétés de l'adapter directement
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+
+
+
         fun bind(task: Task) {
             itemView.findViewById<TextView>(R.id.task_title).setText(task.title);
             itemView.findViewById<TextView>(R.id.textDescriptor).setText(task.description);
+            //itemView.findViewById<ImageButton>(R.id.imageButton)
+            
+
         }
     }
 
@@ -37,12 +44,6 @@ class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(MyItem
         return TaskViewHolder(itemView);
     }
 
-
-    /*
-    override fun getItemCount(): Int {
-        return currentList.count();
-    }
-    */
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
 
@@ -53,6 +54,13 @@ class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(MyItem
     fun refreshAdapter(){
 
     }
+
+
+    // Déclaration de la variable lambda dans l'adapter:
+    var onClickDelete: (Task) -> Unit = {}
+
+
+
 
 
 }

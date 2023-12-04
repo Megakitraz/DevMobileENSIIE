@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -40,6 +41,7 @@ class TaskListFragment : Fragment() {
             taskList = taskList + newTask
             adapter.submitList(taskList)
         }
+
         //super.onViewCreated(view, savedInstanceState)
         //recyclerView.adapter = adapter
 
