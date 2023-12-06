@@ -36,9 +36,14 @@ class TaskListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val recyclerView = view.findViewById<RecyclerView>(R.id.manonpoulain)
         val floatingActionButton = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
+        
         floatingActionButton.setOnClickListener{
             val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
             taskList = taskList + newTask
+            adapter.submitList(taskList)
+        }
+        adapter.onClickDelete =  { task ->
+            taskList = taskList - task
             adapter.submitList(taskList)
         }
 

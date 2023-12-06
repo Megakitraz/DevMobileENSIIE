@@ -23,7 +23,8 @@ object MyItemsDiffCallback : DiffUtil.ItemCallback<Task>() {
 
 class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(MyItemsDiffCallback) {
 
-
+    // Déclaration de la variable lambda dans l'adapter:
+    var onClickDelete: (Task) -> Unit = {}
     // on utilise `inner` ici afin d'avoir accès aux propriétés de l'adapter directement
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -34,7 +35,7 @@ class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(MyItem
             itemView.findViewById<TextView>(R.id.task_title).setText(task.title);
             itemView.findViewById<TextView>(R.id.textDescriptor).setText(task.description);
             //itemView.findViewById<ImageButton>(R.id.imageButton)
-            
+            itemView.findViewById<ImageButton>(R.id.imageButton).setOnClickListener {onClickDelete(task)}
 
         }
     }
@@ -56,8 +57,7 @@ class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(MyItem
     }
 
 
-    // Déclaration de la variable lambda dans l'adapter:
-    var onClickDelete: (Task) -> Unit = {}
+
 
 
 
