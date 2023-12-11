@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.manonpoulain.todo.detail.ui.theme.TodoManonPoulainTheme
+import com.manonpoulain.todo.list.Task
+import java.util.UUID
 
 class DetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,15 +29,19 @@ class DetailActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Detail()
+                    Detail(onValidate = {
+                        intent.putExtra("task", it)
+                    })
                 }
             }
         }
+        setResult(RESULT_OK, intent)
+        finish()
     }
 }
 
 @Composable
-fun Detail(modifier: Modifier = Modifier) {
+fun Detail(onValidate: (Task) -> Unit, modifier: Modifier = Modifier) {
     Column(modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
@@ -55,7 +61,12 @@ fun Detail(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.headlineLarge,
             modifier = modifier
         )
-        Button(onClick = { }) {
+        Button(
+            onClick = {
+                val newTask = Task(id = UUID.randomUUID().toString(), title = "New Task !")
+                onValidate(newTask)
+
+        }) {
 
         }
 
@@ -67,6 +78,6 @@ fun Detail(modifier: Modifier = Modifier) {
 @Composable
 fun DetailPreview() {
     TodoManonPoulainTheme {
-        Detail()
+        Detail({})
     }
 }

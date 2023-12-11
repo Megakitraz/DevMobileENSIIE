@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -16,6 +17,10 @@ import java.util.UUID
 class TaskListFragment : Fragment() {
 
     //private var taskList = listOf("Task 1", "Task 2", "Task 3")
+
+    val createTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        // dans cette callback on récupèrera la task et on l'ajoutera à la liste
+    }
 
     private var taskList = listOf(
         Task(id = "id_1", title = "Task 1", description = "description 1"),
@@ -43,7 +48,8 @@ class TaskListFragment : Fragment() {
             //val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
             //taskList = taskList + newTask
             //adapter.submitList(taskList)
-            startActivity(intent)
+            //startActivity(intent)
+            createTask.launch(intent)
         }
         adapter.onClickDelete =  { task ->
             taskList = taskList - task
