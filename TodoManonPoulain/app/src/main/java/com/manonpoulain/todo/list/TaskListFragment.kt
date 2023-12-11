@@ -21,12 +21,9 @@ class TaskListFragment : Fragment() {
     val createTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         // dans cette callback on récupèrera la task et on l'ajoutera à la liste
         val task = result.data?.getSerializableExtra("task") as Task?
-
-        //val newTask = Task(id = UUID.randomUUID().toString(), title = task.title)
-        if(task != null)
+        if (task != null)
             taskList = taskList + task
         adapter.submitList(taskList)
-
     }
 
     private var taskList = listOf(
