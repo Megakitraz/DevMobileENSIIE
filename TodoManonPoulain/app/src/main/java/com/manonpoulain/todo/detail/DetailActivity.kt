@@ -3,13 +3,18 @@ package com.manonpoulain.todo.detail
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.manonpoulain.todo.detail.ui.theme.TodoManonPoulainTheme
 
 class DetailActivity : ComponentActivity() {
@@ -22,7 +27,7 @@ class DetailActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    Detail()
                 }
             }
         }
@@ -30,17 +35,38 @@ class DetailActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun Detail(modifier: Modifier = Modifier) {
+    Column(modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+
+        Text(
+            text = "Task Detail",
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = modifier
+        )
+        Text(
+            text = "Title",
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = modifier
+        )
+        Text(
+            text = "Description",
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = modifier
+        )
+        Button(onClick = { }) {
+
+        }
+
+    }
+
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun DetailPreview() {
     TodoManonPoulainTheme {
-        Greeting("Android")
+        Detail()
     }
 }
