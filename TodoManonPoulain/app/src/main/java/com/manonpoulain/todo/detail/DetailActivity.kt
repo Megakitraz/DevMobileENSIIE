@@ -31,12 +31,16 @@ class DetailActivity : ComponentActivity() {
                 ) {
                     Detail(onValidate = {
                         intent.putExtra("task", it)
+                        setResult(RESULT_OK, intent)
+                        finish()
                     })
                 }
             }
         }
-        setResult(RESULT_OK, intent)
-        finish()
+
+
+
+
     }
 }
 
@@ -63,7 +67,7 @@ fun Detail(onValidate: (Task) -> Unit, modifier: Modifier = Modifier) {
         )
         Button(
             onClick = {
-                val newTask = Task(id = UUID.randomUUID().toString(), title = "New Task !")
+                val newTask = Task(id = UUID.randomUUID().toString(), title = "New Task !");
                 onValidate(newTask)
 
         }) {
