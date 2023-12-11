@@ -58,6 +58,7 @@ class TaskListFragment : Fragment() {
             //startActivity(intent)
             createTask.launch(intent)
         }
+
         adapter.onClickDelete =  { task ->
             taskList = taskList - task
             adapter.submitList(taskList)
