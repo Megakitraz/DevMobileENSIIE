@@ -30,6 +30,7 @@ import java.util.UUID
 class DetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var task = intent.getSerializableExtra("task") as Task?
         setContent {
             TodoManonPoulainTheme {
                 // A surface container using the 'background' color from the theme
@@ -37,24 +38,24 @@ class DetailActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Detail(onValidate = {
-                        intent.putExtra("task", it)
+                    Detail(onValidate = { newTask ->
+                        intent.putExtra("task", newTask)
                         setResult(RESULT_OK, intent)
                         finish()
-                    })
+                    }, initialTask = task)
+
                 }
             }
         }
 
 
-
-
     }
+
 }
 
 @Composable
-fun Detail(onValidate: (Task) -> Unit, modifier: Modifier = Modifier) {
-    var task by remember { mutableStateOf(Task(UUID.randomUUID().toString(),"","")) }
+fun Detail(onValidate: (Task) -> Unit, modifier: Modifier = Modifier, initialTask: Task?) {
+    var task by remember { mutableStateOf(initialTask ?: Task(UUID.randomUUID().toString(),"","")) }
     Column(modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
@@ -78,7 +79,7 @@ fun Detail(onValidate: (Task) -> Unit, modifier: Modifier = Modifier) {
         )
         Button(
             onClick = {
-                val newTask = Task(id = UUID.randomUUID().toString(), title = task.title, description = task.description);
+                val newTask = Task(id = task.id, title = task.title, description = task.description);
                 onValidate(newTask)
 
         }) {
@@ -89,6 +90,8 @@ fun Detail(onValidate: (Task) -> Unit, modifier: Modifier = Modifier) {
 
 }
 
+
+/*
 @Preview(showBackground = true)
 @Composable
 fun DetailPreview() {
@@ -96,3 +99,4 @@ fun DetailPreview() {
         Detail({})
     }
 }
+*/

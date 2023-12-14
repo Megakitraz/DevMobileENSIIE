@@ -26,6 +26,15 @@ class TaskListFragment : Fragment() {
         adapter.submitList(taskList)
     }
 
+    val editTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val task = result.data?.getSerializableExtra("task") as Task?
+        if(task != null) {
+            taskList = taskList.map { if (it.id == task.id) task else it }
+
+        }
+        adapter.submitList(taskList)
+    }
+
     private var taskList = listOf(
         Task(id = "id_1", title = "Task 1", description = "description 1"),
         Task(id = "id_2", title = "Task 2"),
@@ -59,6 +68,11 @@ class TaskListFragment : Fragment() {
         adapter.onClickDelete =  { task ->
             taskList = taskList - task
             adapter.submitList(taskList)
+        }
+
+        adapter.onClickEdit =  { task ->
+            intent.putExtra("task",task)
+            editTask.launch(intent)
         }
 
         //super.onViewCreated(view, savedInstanceState)
