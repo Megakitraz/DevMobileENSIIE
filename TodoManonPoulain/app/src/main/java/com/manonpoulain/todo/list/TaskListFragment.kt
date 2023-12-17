@@ -55,7 +55,7 @@ class TaskListFragment : Fragment() {
         override fun onLongClickListener(task: Task) : Boolean {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, task.description)
+                putExtra(Intent.EXTRA_TEXT, "Titre: "+ task.title+ "\nDescription: "+ task.description)
                 type = "text/plain"
             }
             val shareIntent = Intent.createChooser(sendIntent, null)
