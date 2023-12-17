@@ -38,7 +38,7 @@ class TaskListAdapter(val listener: TaskListListener) : ListAdapter<Task, TaskLi
             //itemView.findViewById<ImageButton>(R.id.imageButton)
             itemView.findViewById<ImageButton>(R.id.imageButton).setOnClickListener {listener.onClickDelete(task)}
             itemView.findViewById<ImageButton>(R.id.imageButtonEdit).setOnClickListener {listener.onClickEdit(task)}
-
+            itemView.findViewById<TextView>(R.id.task_title).setOnLongClickListener {listener.onLongClickListener(task)} //a changer pour prendre toute la task
         }
     }
 

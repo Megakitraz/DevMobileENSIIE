@@ -45,13 +45,24 @@ class TaskListFragment : Fragment() {
             taskList = taskList - task
             adapter.submitList(taskList)
         }
+
         override fun onClickEdit(task: Task) {
             val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("task",task)
+            intent.putExtra("task", task)
             editTask.launch(intent)
         }
-    }
 
+        override fun onLongClickListener(task: Task) : Boolean {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, task.description)
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
+            return true
+        }
+    }
     private val adapter = TaskListAdapter(adapterListener)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -92,6 +103,7 @@ class TaskListFragment : Fragment() {
 
         recyclerView.adapter = adapter
         adapter.submitList(taskList)
+
     }
 
 
