@@ -40,9 +40,19 @@ class TaskListFragment : Fragment() {
         Task(id = "id_2", title = "Task 2"),
         Task(id = "id_3", title = "Task 3")
     )
+    val adapterListener : TaskListListener = object : TaskListListener {
+        override fun onClickDelete(task: Task) {
+            taskList = taskList - task
+            adapter.submitList(taskList)
+        }
+        override fun onClickEdit(task: Task) {
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("task",task)
+            editTask.launch(intent)
+        }
+    }
 
-
-    private val adapter = TaskListAdapter()
+    private val adapter = TaskListAdapter(adapterListener)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,6 +75,7 @@ class TaskListFragment : Fragment() {
             createTask.launch(intent)
         }
 
+        /*
         adapter.onClickDelete =  { task ->
             taskList = taskList - task
             adapter.submitList(taskList)
@@ -74,6 +85,7 @@ class TaskListFragment : Fragment() {
             intent.putExtra("task",task)
             editTask.launch(intent)
         }
+        */
 
         //super.onViewCreated(view, savedInstanceState)
         //recyclerView.adapter = adapter
@@ -81,4 +93,6 @@ class TaskListFragment : Fragment() {
         recyclerView.adapter = adapter
         adapter.submitList(taskList)
     }
+
+
 }
