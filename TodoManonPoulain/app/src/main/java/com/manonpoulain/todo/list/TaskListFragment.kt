@@ -1,6 +1,7 @@
 package com.manonpoulain.todo.list
 
 import android.content.Intent
+import android.content.Intent.getIntent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ class TaskListFragment : Fragment() {
 
     val createTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         // dans cette callback on récupèrera la task et on l'ajoutera à la liste
+
         val task = result.data?.getSerializableExtra("task") as Task?
         if (task != null)
             taskList = taskList + task

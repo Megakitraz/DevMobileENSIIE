@@ -2,6 +2,7 @@
 
 package com.manonpoulain.todo.detail
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,12 +26,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.manonpoulain.todo.detail.ui.theme.TodoManonPoulainTheme
 import com.manonpoulain.todo.list.Task
+import com.manonpoulain.todo.list.TaskListFragment
 import java.util.UUID
 
 class DetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var task = intent.getSerializableExtra("task") as Task?
+        when {
+            intent?.action == Intent.ACTION_SEND -> {
+                if ("text/plain" == intent.type) {
+                    intent.getStringExtra(Intent.EXTRA_TEXT)?.let {
+                        task = Task(id = UUID.randomUUID().toString(), title = "Task importée", description = it )
+                    }
+                }
+            }
+        }
         setContent {
             TodoManonPoulainTheme {
                 // A surface container using the 'background' color from the theme
