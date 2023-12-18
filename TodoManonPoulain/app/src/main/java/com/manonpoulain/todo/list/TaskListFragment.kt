@@ -1,20 +1,20 @@
 package com.manonpoulain.todo.list
 
 import android.content.Intent
-import android.content.Intent.getIntent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.manonpoulain.todo.R
+import com.manonpoulain.todo.data.Api
 import com.manonpoulain.todo.detail.DetailActivity
-import java.lang.Integer.parseInt
-import java.util.UUID
+import kotlinx.coroutines.launch
 
 class TaskListFragment : Fragment() {
 
@@ -81,6 +81,7 @@ class TaskListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val recyclerView = view.findViewById<RecyclerView>(R.id.manonpoulain)
         val floatingActionButton = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
+
         val intent = Intent(context, DetailActivity::class.java)
         floatingActionButton.setOnClickListener{
             //val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
@@ -91,7 +92,7 @@ class TaskListFragment : Fragment() {
         }
 
         //var sizeTaskList = savedInstanceState?.getSerializable("nbTask")//.toString().toInt()
-    var sizeTaskList = savedInstanceState?.getSerializable("tasklist") as? Array<Task>
+        val sizeTaskList = savedInstanceState?.getSerializable("tasklist") as? Array<Task>
 
         taskList = sizeTaskList?.toList() ?: emptyList()
         /*
@@ -143,6 +144,20 @@ class TaskListFragment : Fragment() {
 
 
     }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            // Ici on ne va pas gérer les cas d'erreur donc on force le crash avec "!!"
+            val user = Api.userWebService.fetchUser().body()!!
+            val userTextView = view?.findViewById<TextView>(R.id.userTextView)
+            if (userTextView != null) {
+                userTextView.text = user.name
+            }
+        }
+    }
+
+
 
 
 }
