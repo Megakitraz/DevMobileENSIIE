@@ -12,7 +12,7 @@
         android:layout_width="374dp"
         android:layout_height="696dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@+id/textViewList"
+        app:layout_constraintTop_toBottomOf="@+id/userTextView"
         tools:ignore="MissingConstraints,UnknownId"
         tools:layout_editor_absoluteX="20dp" />
 
