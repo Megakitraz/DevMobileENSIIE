@@ -36,4 +36,8 @@ object Api {
             .addConverterFactory(jsonSerializer.asConverterFactory("application/json".toMediaType()))
             .build()
     }
+
+    val userWebService : UserWebService by lazy {
+        retrofit.create(UserWebService::class.java)
+    }
 }
