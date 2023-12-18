@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.manonpoulain.todo.R
 import com.manonpoulain.todo.detail.DetailActivity
+import java.lang.Integer.parseInt
 import java.util.UUID
 
 class TaskListFragment : Fragment() {
@@ -57,7 +58,7 @@ class TaskListFragment : Fragment() {
         override fun onLongClickListener(task: Task) : Boolean {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, task.description)
+                putExtra(Intent.EXTRA_TEXT, "Titre: "+ task.title+ "\nDescription: "+ task.description)
                 type = "text/plain"
             }
             val shareIntent = Intent.createChooser(sendIntent, null)
@@ -73,6 +74,7 @@ class TaskListFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_task_list, container, false)
         //adapter.currentList = taskList
+
         return rootView
     }
 
@@ -87,6 +89,24 @@ class TaskListFragment : Fragment() {
             //startActivity(intent)
             createTask.launch(intent)
         }
+
+        //var sizeTaskList = savedInstanceState?.getSerializable("nbTask")//.toString().toInt()
+    var sizeTaskList = savedInstanceState?.getSerializable("tasklist") as? Array<Task>
+
+        taskList = sizeTaskList?.toList() ?: emptyList()
+        /*
+        if (sizeTaskList != null) {
+            for (i in 0..sizeTaskList-1){
+
+                var taskid = savedInstanceState?.getString("task $i id")
+                var tasktitle = savedInstanceState?.getString("task $i title")
+                var taskdescription = savedInstanceState?.getString("task $i description")
+                if(taskid == null) continue
+                if(tasktitle == null) continue
+                if(taskdescription == null) continue
+                taskList.plus(Task(taskid,tasktitle,taskdescription))
+            }
+        }*/
 
         /*
         adapter.onClickDelete =  { task ->
@@ -105,6 +125,22 @@ class TaskListFragment : Fragment() {
 
         recyclerView.adapter = adapter
         adapter.submitList(taskList)
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putSerializable("tasklist",taskList.toTypedArray())
+        super.onSaveInstanceState(outState)
+        //outState.putSerializable("nbTask",taskList.size)
+        //var i = 0
+        /*
+        for(task in taskList){
+            outState.putSerializable("task $i id",task)
+            outState.putSerializable("task $i title",task.title)
+            outState.putSerializable("task $i description",task.description)
+            i++
+        }*/
+
 
     }
 
