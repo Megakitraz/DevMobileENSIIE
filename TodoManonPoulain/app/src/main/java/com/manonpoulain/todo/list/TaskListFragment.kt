@@ -137,7 +137,7 @@ class TaskListFragment : Fragment() {
             // Ici on ne va pas gérer les cas d'erreur donc on force le crash avec "!!"
             val user = Api.userWebService.fetchUser().body()!!
             val userTextView = view?.findViewById<TextView>(R.id.userTextView)
-            val userImageAvatar = view?.findViewById<ImageView>(R.id.imageAvatar)
+            val userImageAvatar = view?.findViewById<ImageView>(R.id.imageView)
             if (userTextView != null) {
                 userTextView.text = user.name
             }

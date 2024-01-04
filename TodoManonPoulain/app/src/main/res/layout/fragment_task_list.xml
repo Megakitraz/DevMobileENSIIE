@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment_task_list">
+    tools:context=".list.TaskListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/manonpoulain"
@@ -39,10 +39,10 @@
         tools:layout_editor_absoluteY="0dp" />
 
     <ImageView
-        android:id="@+id/imageAvatar"
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@tools:sample/avatars"
+        android:contentDescription="@string/app_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/userTextView"
         app:layout_constraintTop_toTopOf="parent" />
