@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.manonpoulain.todo.R
 import com.manonpoulain.todo.data.Api
@@ -135,11 +137,18 @@ class TaskListFragment : Fragment() {
             // Ici on ne va pas gérer les cas d'erreur donc on force le crash avec "!!"
             val user = Api.userWebService.fetchUser().body()!!
             val userTextView = view?.findViewById<TextView>(R.id.userTextView)
+            val userImageAvatar = view?.findViewById<ImageView>(R.id.imageAvatar)
             if (userTextView != null) {
                 userTextView.text = user.name
             }
+
+            if(userImageAvatar != null){
+                userImageAvatar.load("https://goo.gl/gEgYUd")
+            }
+
         }
         viewModel.refresh()
+
     }
 
 
