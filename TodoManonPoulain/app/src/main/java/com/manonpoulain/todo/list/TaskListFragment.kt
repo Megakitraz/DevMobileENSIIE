@@ -8,17 +8,21 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.manonpoulain.todo.R
 import com.manonpoulain.todo.data.Api
+import com.manonpoulain.todo.data.TasksListViewModel
 import com.manonpoulain.todo.detail.DetailActivity
 import kotlinx.coroutines.launch
 
 class TaskListFragment : Fragment() {
 
     //private var taskList = listOf("Task 1", "Task 2", "Task 3")
+
+    private val viewModel: TasksListViewModel by viewModels()
 
     val createTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         // dans cette callback on récupèrera la task et on l'ajoutera à la liste
@@ -95,37 +99,17 @@ class TaskListFragment : Fragment() {
         val sizeTaskList = savedInstanceState?.getSerializable("tasklist") as? Array<Task>
 
         taskList = sizeTaskList?.toList() ?: emptyList()
-        /*
-        if (sizeTaskList != null) {
-            for (i in 0..sizeTaskList-1){
-
-                var taskid = savedInstanceState?.getString("task $i id")
-                var tasktitle = savedInstanceState?.getString("task $i title")
-                var taskdescription = savedInstanceState?.getString("task $i description")
-                if(taskid == null) continue
-                if(tasktitle == null) continue
-                if(taskdescription == null) continue
-                taskList.plus(Task(taskid,tasktitle,taskdescription))
-            }
-        }*/
-
-        /*
-        adapter.onClickDelete =  { task ->
-            taskList = taskList - task
-            adapter.submitList(taskList)
-        }
-
-        adapter.onClickEdit =  { task ->
-            intent.putExtra("task",task)
-            editTask.launch(intent)
-        }
-        */
-
-        //super.onViewCreated(view, savedInstanceState)
-        //recyclerView.adapter = adapter
 
         recyclerView.adapter = adapter
         adapter.submitList(taskList)
+
+        lifecycleScope.launch { // on lance une coroutine car `collect` est `suspend`
+            viewModel.tasksStateFlow.collect { newList ->
+                // cette lambda est exécutée à chaque fois que la liste est mise à jour dans le VM
+                // -> ici, on met à jour la liste dans l'adapter
+                adapter.submitList(newList)
+            }
+        }
 
     }
 
@@ -155,6 +139,7 @@ class TaskListFragment : Fragment() {
                 userTextView.text = user.name
             }
         }
+        viewModel.refresh()
     }
 
 
