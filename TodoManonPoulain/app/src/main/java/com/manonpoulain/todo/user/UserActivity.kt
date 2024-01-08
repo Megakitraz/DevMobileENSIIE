@@ -1,13 +1,15 @@
 package com.manonpoulain.todo.user
 
+import android.Manifest
+import android.content.ContentValues
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.launch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -28,6 +30,10 @@ import java.io.File
 
 class UserActivity : AppCompatActivity() {
 
+    // propriété: une URI dans le dossier partagé "Images"
+    private val captureUri by lazy {
+        contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, ContentValues())
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,12 +44,19 @@ class UserActivity : AppCompatActivity() {
 
             val scope = rememberCoroutineScope()
 
-            val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+            // launcher
+            val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+                if (success) uri = captureUri
+            }
+
+            /*val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+                    success ->
+                if (success) uri = capturedUri
                 bitmap = it
                 scope.launch {
                     Api.userWebService.updateAvatar(bitmap!!.toRequestBody())
                 }
-            }
+            }*/
 
             val pickPhoto = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
                 uri = it
@@ -51,6 +64,12 @@ class UserActivity : AppCompatActivity() {
                     Api.userWebService.updateAvatar(uri!!.toRequestBody())
                 }
             }
+            
+            val getPermission = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.RequestPermission()) {
+                pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+
 
             Column {
                 AsyncImage(
@@ -60,14 +79,15 @@ class UserActivity : AppCompatActivity() {
                 )
                 Button(
                     onClick = {
-                        takePicture.launch()
-                        //Envoie la photo
+                        takePicture.launch(captureUri)
 
                     },
                     content = { Text("Take picture") }
                 )
                 Button(
-                    onClick = {pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))},
+                    onClick = {
+                        getPermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        },
                     content = { Text("Pick photo") }
                 )
             }
@@ -94,5 +114,7 @@ class UserActivity : AppCompatActivity() {
             body = fileBody
         )
     }
+
+
 }
 
