@@ -31,18 +31,28 @@ class TaskListFragment : Fragment() {
         // dans cette callback on récupèrera la task et on l'ajoutera à la liste
 
         val task = result.data?.getSerializableExtra("task") as Task?
+        /*
         if (task != null)
             taskList = taskList + task
         adapter.submitList(taskList)
+        */
+        if (task != null){
+            viewModel.add(task)
+        }
     }
 
     val editTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         val task = result.data?.getSerializableExtra("task") as Task?
+        /*
         if(task != null) {
             taskList = taskList.map { if (it.id == task.id) task else it }
 
         }
         adapter.submitList(taskList)
+        */
+        if (task != null){
+            viewModel.edit(task)
+        }
     }
 
     private var taskList = listOf(
@@ -52,8 +62,13 @@ class TaskListFragment : Fragment() {
     )
     val adapterListener : TaskListListener = object : TaskListListener {
         override fun onClickDelete(task: Task) {
+            /*
             taskList = taskList - task
             adapter.submitList(taskList)
+
+             */
+
+            viewModel.remove(task)
         }
 
         override fun onClickEdit(task: Task) {
@@ -121,20 +136,13 @@ class TaskListFragment : Fragment() {
             }
         }
 
+        viewModel.refresh()
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putSerializable("tasklist",taskList.toTypedArray())
         super.onSaveInstanceState(outState)
-        //outState.putSerializable("nbTask",taskList.size)
-        //var i = 0
-        /*
-        for(task in taskList){
-            outState.putSerializable("task $i id",task)
-            outState.putSerializable("task $i title",task.title)
-            outState.putSerializable("task $i description",task.description)
-            i++
-        }*/
 
 
     }

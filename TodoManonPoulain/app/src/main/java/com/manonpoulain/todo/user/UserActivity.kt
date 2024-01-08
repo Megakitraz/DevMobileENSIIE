@@ -52,7 +52,6 @@ class UserActivity : AppCompatActivity() {
                 Button(
                     onClick = {
                         takePicture.launch()
-                        //Envoie la photo
 
                     },
                     content = { Text("Take picture") }
