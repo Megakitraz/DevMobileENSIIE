@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
 import androidx.appcompat.app.AppCompatActivity
@@ -27,17 +28,6 @@ import java.io.File
 
 class UserActivity : AppCompatActivity() {
 
-    private fun Bitmap.toRequestBody(): MultipartBody.Part {
-        val tmpFile = File.createTempFile("avatar", "jpg")
-        tmpFile.outputStream().use { // *use*: open et close automatiquement
-            this.compress(Bitmap.CompressFormat.JPEG, 100, it) // *this* est le bitmap ici
-        }
-        return MultipartBody.Part.createFormData(
-            name = "avatar",
-            filename = "avatar.jpg",
-            body = tmpFile.readBytes().toRequestBody()
-        )
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -55,6 +45,12 @@ class UserActivity : AppCompatActivity() {
                 }
             }
 
+            val pickPhoto = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+                uri = it
+                scope.launch {
+                    Api.userWebService.updateAvatar(uri!!.toRequestBody())
+                }
+            }
 
             Column {
                 AsyncImage(
@@ -71,23 +67,32 @@ class UserActivity : AppCompatActivity() {
                     content = { Text("Take picture") }
                 )
                 Button(
-                    onClick = {},
+                    onClick = {pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))},
                     content = { Text("Pick photo") }
                 )
             }
         }
     }
-
-}
-
-private fun Bitmap.toRequestBody(): MultipartBody.Part {
-    val tmpFile = File.createTempFile("avatar", "jpg")
-    tmpFile.outputStream().use { // *use* se charge de faire open et close
-        this.compress(Bitmap.CompressFormat.JPEG, 100, it) // *this* est le bitmap ici
+    private fun Bitmap.toRequestBody(): MultipartBody.Part {
+        val tmpFile = File.createTempFile("avatar", "jpg")
+        tmpFile.outputStream().use { // *use* se charge de faire open et close
+            this.compress(Bitmap.CompressFormat.JPEG, 100, it) // *this* est le bitmap ici
+        }
+        return MultipartBody.Part.createFormData(
+            name = "avatar",
+            filename = "avatar.jpg",
+            body = tmpFile.readBytes().toRequestBody()
+        )
     }
-    return MultipartBody.Part.createFormData(
-        name = "avatar",
-        filename = "avatar.jpg",
-        body = tmpFile.readBytes().toRequestBody()
-    )
+
+    private fun Uri.toRequestBody(): MultipartBody.Part {
+        val fileInputStream = contentResolver.openInputStream(this)!!
+        val fileBody = fileInputStream.readBytes().toRequestBody()
+        return MultipartBody.Part.createFormData(
+            name = "avatar",
+            filename = "avatar.jpg",
+            body = fileBody
+        )
+    }
 }
+
