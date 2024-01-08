@@ -151,7 +151,10 @@ class TaskListFragment : Fragment() {
             }
 
             if(userImageAvatar != null){
-                userImageAvatar.load("https://www.media.pokekalos.fr/img/pokemon/home/small/chetiflor.png")
+                //userImageAvatar.load("https://www.media.pokekalos.fr/img/pokemon/home/small/chetiflor.png")
+                userImageAvatar.load(user.avatar) {
+                    error(R.drawable.ic_launcher_background) // image par défaut en cas d'erreur
+                }
             }
             userImageAvatar?.load(user.avatar) {
                 error(R.drawable.ic_launcher_background) // image par défaut en cas d'erreur
