@@ -100,7 +100,7 @@ class TaskListFragment : Fragment() {
             createTask.launch(intentDetail)
         }
 
-        floatingActionButton.setOnClickListener{
+        ImageAvatarButton.setOnClickListener{
 
             startActivity(intentUser)
         }
@@ -152,6 +152,9 @@ class TaskListFragment : Fragment() {
 
             if(userImageAvatar != null){
                 userImageAvatar.load("https://goo.gl/gEgYUd")
+            }
+            userImageAvatar?.load(user.avatar) {
+                error(R.drawable.ic_launcher_background) // image par défaut en cas d'erreur
             }
 
         }
