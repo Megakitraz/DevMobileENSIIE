@@ -88,7 +88,7 @@ class TaskListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val recyclerView = view.findViewById<RecyclerView>(R.id.manonpoulain)
         val floatingActionButton = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
-        val ImageAvatarButton = view.findViewById<FloatingActionButton>(R.id.imageAvatar)
+        val imageAvatarButton = view.findViewById<ImageView>(R.id.imageAvatar)
 
         val intentDetail = Intent(context, DetailActivity::class.java)
         val intentUser = Intent(context, UserActivity::class.java)
@@ -100,7 +100,7 @@ class TaskListFragment : Fragment() {
             createTask.launch(intentDetail)
         }
 
-        ImageAvatarButton.setOnClickListener{
+        imageAvatarButton.setOnClickListener{
 
             startActivity(intentUser)
         }
@@ -151,7 +151,7 @@ class TaskListFragment : Fragment() {
             }
 
             if(userImageAvatar != null){
-                userImageAvatar.load("https://goo.gl/gEgYUd")
+                userImageAvatar.load("https://www.media.pokekalos.fr/img/pokemon/home/small/chetiflor.png")
             }
             userImageAvatar?.load(user.avatar) {
                 error(R.drawable.ic_launcher_background) // image par défaut en cas d'erreur
