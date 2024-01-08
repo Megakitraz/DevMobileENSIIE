@@ -151,7 +151,7 @@ class TaskListFragment : Fragment() {
             }
 
             if(userImageAvatar != null){
-                userImageAvatar.load("https://www.team-aaa.com/media/cache/article_big/upload/media/post_image/0001/08/91004903683812443411d1d178e242e9c073a907.jpeg/gEgYUd")
+                userImageAvatar.load("https://www.media.pokekalos.fr/img/pokemon/home/small/chetiflor.png")
             }
 
         }
