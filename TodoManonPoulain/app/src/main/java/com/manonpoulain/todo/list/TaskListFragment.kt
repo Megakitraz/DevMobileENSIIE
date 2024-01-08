@@ -88,7 +88,7 @@ class TaskListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val recyclerView = view.findViewById<RecyclerView>(R.id.manonpoulain)
         val floatingActionButton = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
-        val ImageAvatarButton = view.findViewById<FloatingActionButton>(R.id.imageAvatar)
+        val imageAvatarButton = view.findViewById<ImageView>(R.id.imageAvatar)
 
         val intentDetail = Intent(context, DetailActivity::class.java)
         val intentUser = Intent(context, UserActivity::class.java)
@@ -100,7 +100,7 @@ class TaskListFragment : Fragment() {
             createTask.launch(intentDetail)
         }
 
-        floatingActionButton.setOnClickListener{
+        imageAvatarButton.setOnClickListener{
 
             startActivity(intentUser)
         }
