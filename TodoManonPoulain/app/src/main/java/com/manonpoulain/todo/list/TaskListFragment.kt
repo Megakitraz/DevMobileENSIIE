@@ -18,6 +18,7 @@ import com.manonpoulain.todo.R
 import com.manonpoulain.todo.data.Api
 import com.manonpoulain.todo.data.TasksListViewModel
 import com.manonpoulain.todo.detail.DetailActivity
+import com.manonpoulain.todo.user.UserActivity
 import kotlinx.coroutines.launch
 
 class TaskListFragment : Fragment() {
@@ -87,14 +88,21 @@ class TaskListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val recyclerView = view.findViewById<RecyclerView>(R.id.manonpoulain)
         val floatingActionButton = view.findViewById<FloatingActionButton>(R.id.floatingActionButton2)
+        val ImageAvatarButton = view.findViewById<FloatingActionButton>(R.id.imageAvatar)
 
-        val intent = Intent(context, DetailActivity::class.java)
+        val intentDetail = Intent(context, DetailActivity::class.java)
+        val intentUser = Intent(context, UserActivity::class.java)
         floatingActionButton.setOnClickListener{
             //val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
             //taskList = taskList + newTask
             //adapter.submitList(taskList)
             //startActivity(intent)
-            createTask.launch(intent)
+            createTask.launch(intentDetail)
+        }
+
+        floatingActionButton.setOnClickListener{
+
+            startActivity(intentUser)
         }
 
         //var sizeTaskList = savedInstanceState?.getSerializable("nbTask")//.toString().toInt()
@@ -137,7 +145,7 @@ class TaskListFragment : Fragment() {
             // Ici on ne va pas gérer les cas d'erreur donc on force le crash avec "!!"
             val user = Api.userWebService.fetchUser().body()!!
             val userTextView = view?.findViewById<TextView>(R.id.userTextView)
-            val userImageAvatar = view?.findViewById<ImageView>(R.id.imageView)
+            val userImageAvatar = view?.findViewById<ImageView>(R.id.imageAvatar)
             if (userTextView != null) {
                 userTextView.text = user.name
             }
