@@ -164,6 +164,9 @@ class TaskListFragment : Fragment() {
                     error(R.drawable.ic_launcher_background) // image par défaut en cas d'erreur
                 }
             }
+            userImageAvatar?.load(user.avatar) {
+                error(R.drawable.ic_launcher_background) // image par défaut en cas d'erreur
+            }
 
         }
         viewModel.refresh()
