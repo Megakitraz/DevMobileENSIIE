@@ -10,6 +10,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -22,7 +23,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import coil.compose.AsyncImage
-import com.manonpoulain.todo.data.Api
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -34,6 +34,9 @@ class UserActivity : AppCompatActivity() {
     private val captureUri by lazy {
         contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, ContentValues())
     }
+
+    private val viewModel : UserViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,7 +49,15 @@ class UserActivity : AppCompatActivity() {
 
             // launcher
             val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-                if (success) uri = captureUri
+                if (success) {
+                    uri = captureUri
+                    scope.launch {
+                        //Api.userWebService.updateAvatar(uri!!.toRequestBody())
+                        viewModel.UpdateAvatar(uri!!.toRequestBody())
+                    }
+                }
+
+
             }
 
             /*val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) {
@@ -61,7 +72,8 @@ class UserActivity : AppCompatActivity() {
             val pickPhoto = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
                 uri = it
                 scope.launch {
-                    Api.userWebService.updateAvatar(uri!!.toRequestBody())
+                    //Api.userWebService.updateAvatar(uri!!.toRequestBody())
+                    viewModel.UpdateAvatar(uri!!.toRequestBody())
                 }
             }
             
