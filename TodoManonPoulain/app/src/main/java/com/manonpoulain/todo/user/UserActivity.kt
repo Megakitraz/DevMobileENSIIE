@@ -30,7 +30,6 @@ import java.io.File
 
 class UserActivity : AppCompatActivity() {
 
-    // propriété: une URI dans le dossier partagé "Images"
     private val captureUri by lazy {
         contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, ContentValues())
     }
@@ -52,7 +51,6 @@ class UserActivity : AppCompatActivity() {
                 if (success) {
                     uri = captureUri
                     scope.launch {
-                        //Api.userWebService.updateAvatar(uri!!.toRequestBody())
                         viewModel.UpdateAvatar(uri!!.toRequestBody())
                     }
                 }
@@ -60,6 +58,7 @@ class UserActivity : AppCompatActivity() {
 
             }
 
+            /* Ancienne version dans le TP */
             /*val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) {
                     success ->
                 if (success) uri = capturedUri

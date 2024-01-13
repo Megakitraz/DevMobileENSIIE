@@ -23,19 +23,12 @@ import kotlinx.coroutines.launch
 
 class TaskListFragment : Fragment() {
 
-    //private var taskList = listOf("Task 1", "Task 2", "Task 3")
 
     private val viewModel: TasksListViewModel by viewModels()
 
     val createTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         // dans cette callback on récupèrera la task et on l'ajoutera à la liste
-
         val task = result.data?.getSerializableExtra("task") as Task?
-        /*
-        if (task != null)
-            taskList = taskList + task
-        adapter.submitList(taskList)
-        */
         if (task != null){
             viewModel.add(task)
         }
@@ -43,13 +36,6 @@ class TaskListFragment : Fragment() {
 
     val editTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         val task = result.data?.getSerializableExtra("task") as Task?
-        /*
-        if(task != null) {
-            taskList = taskList.map { if (it.id == task.id) task else it }
-
-        }
-        adapter.submitList(taskList)
-        */
         if (task != null){
             viewModel.edit(task)
         }
@@ -62,12 +48,6 @@ class TaskListFragment : Fragment() {
     )
     val adapterListener : TaskListListener = object : TaskListListener {
         override fun onClickDelete(task: Task) {
-            /*
-            taskList = taskList - task
-            adapter.submitList(taskList)
-
-             */
-
             viewModel.remove(task)
         }
 
@@ -95,8 +75,6 @@ class TaskListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_task_list, container, false)
-        //adapter.currentList = taskList
-
         return rootView
     }
 
@@ -108,19 +86,13 @@ class TaskListFragment : Fragment() {
         val intentDetail = Intent(context, DetailActivity::class.java)
         val intentUser = Intent(context, UserActivity::class.java)
         floatingActionButton.setOnClickListener{
-            //val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
-            //taskList = taskList + newTask
-            //adapter.submitList(taskList)
-            //startActivity(intent)
             createTask.launch(intentDetail)
         }
 
         imageAvatarButton.setOnClickListener{
-
             startActivity(intentUser)
         }
 
-        //var sizeTaskList = savedInstanceState?.getSerializable("nbTask")//.toString().toInt()
         val sizeTaskList = savedInstanceState?.getSerializable("tasklist") as? Array<Task>
 
         taskList = sizeTaskList?.toList() ?: emptyList()
@@ -130,8 +102,6 @@ class TaskListFragment : Fragment() {
 
         lifecycleScope.launch { // on lance une coroutine car `collect` est `suspend`
             viewModel.tasksStateFlow.collect { newList ->
-                // cette lambda est exécutée à chaque fois que la liste est mise à jour dans le VM
-                // -> ici, on met à jour la liste dans l'adapter
                 adapter.submitList(newList)
             }
         }
@@ -143,8 +113,6 @@ class TaskListFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putSerializable("tasklist",taskList.toTypedArray())
         super.onSaveInstanceState(outState)
-
-
     }
 
     override fun onResume() {
@@ -159,7 +127,6 @@ class TaskListFragment : Fragment() {
             }
 
             if(userImageAvatar != null){
-                //userImageAvatar.load("https://www.media.pokekalos.fr/img/pokemon/home/small/chetiflor.png")
                 userImageAvatar.load(user.avatar) {
                     error(R.drawable.ic_launcher_background) // image par défaut en cas d'erreur
                 }

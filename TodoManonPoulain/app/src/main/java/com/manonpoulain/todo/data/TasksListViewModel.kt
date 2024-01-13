@@ -25,7 +25,6 @@ class TasksListViewModel : ViewModel() {
         }
     }
 
-    // à compléter plus tard:
     fun add(task: Task) {
         viewModelScope.launch {
             val response = webService.create(task)
@@ -33,7 +32,6 @@ class TasksListViewModel : ViewModel() {
                 Log.e("Network", "Error: ${response.raw()}")
                 return@launch
             }
-
             val createdTask = response.body()!!
             val updatedList = tasksStateFlow.value.plus(createdTask)
             tasksStateFlow.value = updatedList
@@ -46,7 +44,6 @@ class TasksListViewModel : ViewModel() {
                 Log.e("Network", "Error: ${response.raw()}")
                 return@launch
             }
-
             val updatedTask = response.body()!!
             val updatedList = tasksStateFlow.value.map {
                 if (it.id == updatedTask.id) updatedTask else it
@@ -61,8 +58,6 @@ class TasksListViewModel : ViewModel() {
                 Log.e("Network", "Error: ${response.raw()}")
                 return@launch
             }
-
-            //le response.body est vide, il ne renvoit rien
             tasksStateFlow.value = tasksStateFlow.value.minus(task)
         }
     }
